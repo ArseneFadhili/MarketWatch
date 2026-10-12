@@ -1,0 +1,56 @@
+# Copy this file to config.yaml and edit it.  config.yaml is git-ignored.
+#
+# Secrets (webhook URLs, bot tokens) are read from environment variables via
+# ${NAME}, so they never end up in git.
+
+interval_seconds: 60      # how often to poll prices (minimum 5)
+cooldown_minutes: 30      # don't repeat the same alert more often than this
+state_file: state.json    # price history + cooldowns survive restarts
+
+notifiers:
+  console: true           # print alerts in the terminal
+
+  # Discord: Server Settings -> Integrations -> Webhooks -> New Webhook -> Copy URL
+  # discord:
+  #   webhook_url: ${DISCORD_WEBHOOK_URL}
+
+  # Telegram: talk to @BotFather for a token, then message your bot and find your
+  # chat id at https://api.telegram.org/bot<TOKEN>/getUpdates
+  # telegram:
+  #   bot_token: ${TELEGRAM_BOT_TOKEN}
+  #   chat_id: ${TELEGRAM_CHAT_ID}
+
+watchlist:
+  # Coinbase: no API key. Symbols look like BTC-USD.
+  - symbol: BTC-USD
+    source: coinbase
+    rules:
+      - type: percent_change   # moved 3% or more...
+        percent: 3
+        window_minutes: 15     # ...within the last 15 minutes
+      - type: below
+        price: 50000
+
+  - symbol: ETH-USD
+    source: coinbase
+    rules:
+      - type: percent_change
+        percent: 4
+        window_minutes: 30
+
+  # CoinGecko: no API key. Symbols are coin ids like "solana".
+  - symbol: solana
+    source: coingecko
+    rules:
+      - type: above
+        price: 250
+
+  # Alpha Vantage (stocks): free key at https://www.alphavantage.co/support/#api-key
+  # Export it as ALPHAVANTAGE_API_KEY. The free tier is ~25 requests/day, so use a
+  # long interval or only a few symbols.
+  # - symbol: AAPL
+  #   source: alphavantage
+  #   rules:
+  #     - type: percent_change
+  #       percent: 2
+  #       window_minutes: 120
