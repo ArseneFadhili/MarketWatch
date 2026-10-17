@@ -22,8 +22,8 @@ ALERT  BTC-USD down 3.41% in 15 min: $61,982.10 (was $64,171.00)
 ## Quick start
 
 ```bash
-https://github.com/ArseneFadhili/MarketWatch.git
-cd marketwatch
+git clone https://github.com/ArseneFadhili/MarketWatch.git
+cd MarketWatch
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
 
